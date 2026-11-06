@@ -50,4 +50,8 @@ tools.lookup_order("MOCK-ORDER-001", postcode="MOCK 1001")
 
 Order lookup, tracking, return checks, and order mutations require an order number plus matching email or postcode. Risky mutations also require `confirmed=True` and a stable `idempotency_key`. Every call and result is recorded in SQLite; no real store, payment, or shipping service is contacted.
 
-See [docs/decisions.md](docs/decisions.md) for the mock-data and backend design choices.
+## Decision Layer
+
+`DecisionEngine.decide(message, situation, ...)` asks the configured model for a structured decision record and validates its move, confidence, stakes, emotion, policy references, and tool plan. A deterministic gate then enforces the policy/authority limits, identity requirements, missing facts, stakes, and confirmation requirements. The gate scenario table runs locally without a model call.
+
+See [docs/decisions.md](docs/decisions.md) for the mock-data, backend, and decision-gate choices.
