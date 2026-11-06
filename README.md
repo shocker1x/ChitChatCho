@@ -62,4 +62,16 @@ Order lookup, tracking, return checks, and order mutations require an order numb
 
 `POST /conversations/{conversation_id}/complete` stores a concise summary and optional preferences after the same server-side identity check. Completed conversations are bound to their verified customer. The API does not trust a client-supplied verification flag.
 
+## Evaluations
+
+The scenario library contains 60 synthetic cases across the nine planned categories. Run the full scripted suite, including model-based rubric judging, with:
+
+```powershell
+python -m evals.runner
+```
+
+The command reports expected-move and overall pass rates by category, deterministic hard-rule violations (including unsupported dates, customer-specific status claims, and numeric policy claims), and averages for each rubric item. It saves full transcripts and scores to the ignored `evals/results/latest.json`. For a small provider smoke run, use `python -m evals.runner --limit 3 --no-judge`.
+
+Hard checks are deterministic and do not call a model. The rubric judge is model-based and validates all eight scores. After generating at least 20 judge-scored transcripts, prepare a human-rating sheet with `python -m evals.calibration --prepare evals/results/latest.json`; complete each `human_scores` object, then calculate exact agreement and linearly weighted Cohen's kappa using `python -m evals.calibration --score evals/calibration.json`. Human calibration results remain pending until those ratings are supplied.
+
 See [docs/manual_chats.md](docs/manual_chats.md) for ten manually drafted sample conversations and [docs/decisions.md](docs/decisions.md) for the design choices.

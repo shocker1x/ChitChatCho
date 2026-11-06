@@ -1,0 +1,22 @@
+{
+  "data_notice": "Evaluation rubric for synthetic rug-store support conversations.",
+  "scale": {
+    "minimum": 1,
+    "maximum": 5,
+    "anchors": {
+      "1": "Serious failure",
+      "3": "Acceptable but inconsistent",
+      "5": "Consistently strong"
+    }
+  },
+  "items": [
+    {"id":"right_move","name":"Chose the right move","description":"Answered, clarified, acted, confirmed, escalated, or declined appropriately for the request, facts, and stakes."},
+    {"id":"emotion","name":"Acknowledged emotion appropriately","description":"Recognized negative emotion briefly and naturally without ignoring it or overdoing sympathy."},
+    {"id":"necessary_questions","name":"Asked only what was needed","description":"Asked no unnecessary questions, asked one at a time, and did not ask for established facts again."},
+    {"id":"accuracy","name":"Accurate to policy and data","description":"Followed written mock policies and available facts without inventing details."},
+    {"id":"next_step","name":"Clear next step","description":"Made the immediate action, handoff, or expected next step clear."},
+    {"id":"natural_language","name":"Natural, concise language","description":"Used plain, human language at an appropriate level of detail without corporate filler."},
+    {"id":"uncertainty","name":"Honest about uncertainty","description":"Said when information was unknown or needed checking and avoided unsupported promises."},
+    {"id":"recovery","name":"Handled recovery or contradiction well","description":"Noticed changed or conflicting information, acknowledged misunderstandings, and corrected course plainly."}
+  ]
+}
