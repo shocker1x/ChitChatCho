@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "chitchatcho"
+version = "0.1.0"
+description = "Phase 0 setup for a mock rug-store support agent"
+requires-python = ">=3.11"
+dependencies = [
+    "anthropic>=0.40",
+    "fastapi>=0.115",
+    "google-genai>=1.0",
+    "python-dotenv>=1.0",
+    "uvicorn>=0.30",
+]
+
+[project.optional-dependencies]
+dev = [
+    "httpx>=0.27",
+    "pytest>=8.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.setuptools.packages.find]
+include = ["agent*", "app*"]

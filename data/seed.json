@@ -1,0 +1,27 @@
+{
+  "data_notice": "All records below are invented mock data for this portfolio project.",
+  "customers": [
+    {
+      "customer_id": "MOCK-CUST-001",
+      "name": "Jordan Sample",
+      "email": "jordan@example.invalid"
+    }
+  ],
+  "products": [
+    {
+      "product_id": "MOCK-RUG-001",
+      "name": "Cedar Wool Rug",
+      "size": "5x8",
+      "material": "wool",
+      "price": 249.0
+    }
+  ],
+  "orders": [
+    {
+      "order_id": "MOCK-ORDER-001",
+      "customer_id": "MOCK-CUST-001",
+      "product_id": "MOCK-RUG-001",
+      "status": "processing"
+    }
+  ]
+}
