@@ -61,7 +61,16 @@ def initialize_database(
             CREATE TABLE IF NOT EXISTS conversations (
                 conversation_id TEXT PRIMARY KEY,
                 customer_id TEXT REFERENCES customers(customer_id),
-                summary TEXT NOT NULL DEFAULT ''
+                summary TEXT NOT NULL DEFAULT '',
+                known_facts_json TEXT NOT NULL DEFAULT '[]',
+                completed_at TEXT NOT NULL DEFAULT ''
+            );
+            CREATE TABLE IF NOT EXISTS customer_profiles (
+                customer_id TEXT PRIMARY KEY REFERENCES customers(customer_id),
+                preferences_json TEXT NOT NULL DEFAULT '{}',
+                past_issues_json TEXT NOT NULL DEFAULT '[]',
+                last_conversation_summary TEXT NOT NULL DEFAULT '',
+                updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
             );
             CREATE TABLE IF NOT EXISTS conversation_turns (
                 turn_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -119,6 +128,14 @@ def initialize_database(
             connection,
             "customers",
             {"postcode": "TEXT NOT NULL DEFAULT ''"},
+        )
+        _ensure_columns(
+            connection,
+            "conversations",
+            {
+                "known_facts_json": "TEXT NOT NULL DEFAULT '[]'",
+                "completed_at": "TEXT NOT NULL DEFAULT ''",
+            },
         )
         _ensure_columns(
             connection,
