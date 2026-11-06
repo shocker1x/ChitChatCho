@@ -39,6 +39,7 @@ class MemoryStore:
                 if conversation["customer_id"] != identity["customer_id"]:
                     identity = None
             profile = self._load_profile(connection, identity["customer_id"]) if identity else None
+        connection.close()
 
         if profile:
             profile_facts = [
@@ -110,6 +111,7 @@ class MemoryStore:
                 "UPDATE conversations SET known_facts_json = ? WHERE conversation_id = ?",
                 (json.dumps(current), conversation_id),
             )
+        connection.close()
         return {
             "conversation_id": conversation_id,
             "turn_number": next_number,
@@ -190,6 +192,7 @@ class MemoryStore:
                    WHERE o.customer_id = ? ORDER BY o.order_id""",
                 (customer_id,),
             ).fetchall()
+        connection.close()
 
         return {
             "customer_id": customer_id,

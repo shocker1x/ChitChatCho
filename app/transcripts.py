@@ -55,6 +55,7 @@ def get_transcript(
                FROM conversation_turns WHERE conversation_id = ? ORDER BY turn_number""",
             (conversation_id,),
         ).fetchall()
+    connection.close()
     return [
         {
             "turn_number": row["turn_number"],

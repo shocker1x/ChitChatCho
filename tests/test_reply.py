@@ -46,7 +46,7 @@ def test_reply_prompt_uses_decision_move_emotion_and_tool_results():
 
     assert reply == client.response
     assert "Report only what the supplied tool results confirm" in client.prompt
-    assert "acknowledge the frustration once" in client.prompt
+    assert "Name the specific frustration or impact" in client.prompt
     assert "shipment_date_honesty" in client.prompt
     assert '"identity_verified": true' in client.prompt
 

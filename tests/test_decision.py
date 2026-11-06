@@ -192,6 +192,84 @@ def test_model_cannot_supply_internal_gate_metadata():
         DecisionEngine(FakeClient()).decide("Hello", "product_advice")
 
 
+def test_decision_parser_normalizes_known_provider_shape_quirks():
+    payload = {
+        "intent": "Check an order",
+        "known": [],
+        "missing": ["order number"],
+        "move": "clarify",
+        "confidence": "high",
+        "stakes": "low",
+        "policy_refs": ["identity_verification"],
+        "tool": [],
+        "emotion": "calm",
+        "reason": "Order details require identity verification.",
+        "customer_message": "Where is my order?",
+        "conversation_history": [],
+    }
+
+    class FakeClient:
+        def complete(self, prompt):
+            return json.dumps(payload)
+
+    decision = DecisionEngine(FakeClient()).decide("Where is my order?", "order_status")
+
+    assert decision.move == Move.CLARIFY
+    assert decision.tool_plan == []
+
+
+def test_decision_parser_normalizes_empty_tool_alias():
+    payload = {
+        "intent": "Check damage report",
+        "known": [],
+        "missing": ["delivery date"],
+        "move": "clarify",
+        "confidence": "high",
+        "stakes": "low",
+        "policy_refs": ["damage_reporting"],
+        "tool": "",
+        "emotion": "calm",
+        "reason": "The reporting time needs confirmation.",
+    }
+
+    class FakeClient:
+        def complete(self, prompt):
+            return json.dumps(payload)
+
+    decision = DecisionEngine(FakeClient()).decide("The rug is damaged.", "damaged_or_wrong_item")
+
+    assert decision.move == Move.CLARIFY
+    assert decision.tool_plan == []
+
+
+def test_decision_engine_retries_malformed_structured_response():
+    valid_payload = {
+        "intent": "Give wool care guidance",
+        "known": [],
+        "missing": [],
+        "move": "answer",
+        "confidence": "high",
+        "stakes": "low",
+        "policy_refs": ["normal_rug_characteristics"],
+        "tool_plan": [],
+        "emotion": "calm",
+        "reason": "General care guidance is available.",
+    }
+
+    class FlakyClient:
+        attempts = 0
+
+        def complete(self, prompt):
+            self.attempts += 1
+            return "{malformed" if self.attempts == 1 else json.dumps(valid_payload)
+
+    client = FlakyClient()
+    decision = DecisionEngine(client).decide("Does wool shed?", "product_advice")
+
+    assert decision.move == Move.ANSWER
+    assert client.attempts == 2
+
+
 def test_tool_plan_rejects_unimplemented_tools():
     with pytest.raises(ValidationError):
         ToolCall(tool="delete_customer", inputs={})

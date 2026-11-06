@@ -9,10 +9,10 @@ from agent.llm import CompletionClient, create_llm_client
 
 EMOTION_GUIDANCE = {
     Emotion.CALM: "Keep the tone warm, direct, and matter-of-fact.",
-    Emotion.FRUSTRATED: "Briefly acknowledge the frustration once, then focus on the next useful step.",
-    Emotion.ANXIOUS: "Use a steady, reassuring tone without promising an unsupported outcome or date.",
+    Emotion.FRUSTRATED: "Name the specific frustration or impact the customer described in one short sentence, then focus on the next useful step. Avoid a generic or repeated apology.",
+    Emotion.ANXIOUS: "Briefly acknowledge the specific worry the customer described. Use a steady tone without promising an unsupported outcome or date, then give one useful next step.",
     Emotion.CONFUSED: "Use plain language and explain one point at a time.",
-    Emotion.ANGRY: "Stay calm, briefly acknowledge the concern, and move to a concrete next step.",
+    Emotion.ANGRY: "Stay calm and specifically acknowledge the impact or concern the customer described in one short sentence, then move to one concrete next step. Do not over-apologize.",
 }
 
 

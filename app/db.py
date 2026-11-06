@@ -234,6 +234,7 @@ def initialize_database(
                     VALUES (:order_id, :carrier, :tracking_number, :status, :estimated_delivery, :last_event)""",
             shipments,
         )
+    connection.close()
 
 
 def _ensure_columns(

@@ -6,7 +6,7 @@ from pydantic import ValidationError
 from evals.calibration import calculate_agreement, prepare_calibration, weighted_cohen_kappa
 from evals.hard_rules import check_hard_rules
 from evals.judge import RUBRIC_IDS, RubricJudge, RubricResult
-from evals.runner import EvaluationRunner, summarize
+from evals.runner import EvaluationRunner, PacedCompletionClient, RequestPacer, summarize
 
 
 def test_hard_checks_detect_all_structured_violations():
@@ -180,13 +180,39 @@ def test_runner_records_transcript_hard_checks_and_summary(tmp_path):
         decision_client_factory=FakeDecisionClient,
         reply_client_factory=FakeReplyClient,
     )
+    checkpoints = []
 
-    result = runner.run_scenario(scenario, use_judge=False)
+    results = runner.run_all(
+        [scenario],
+        use_judge=False,
+        on_progress=lambda completed: checkpoints.append(len(completed)),
+    )
+    result = results[0]
     report = summarize([result])
 
+    assert checkpoints == [1]
     assert result["expected_move_pass"] is True
     assert result["turns"][0]["decision"]["move"] == "answer"
     assert result["turns"][0]["reply"].startswith("Light wool shedding")
     assert result["hard_violations"] == []
     assert report["categories"]["product_advice"]["scenario_count"] == 1
     assert report["hard_rule_violations"] == 0
+
+
+def test_paced_provider_retries_transient_503(monkeypatch):
+    class TemporaryFailureClient:
+        attempts = 0
+
+        def complete(self, prompt):
+            self.attempts += 1
+            if self.attempts == 1:
+                raise RuntimeError("503 UNAVAILABLE")
+            return "ok"
+
+    client = TemporaryFailureClient()
+    monkeypatch.setattr("evals.runner.time.sleep", lambda seconds: None)
+
+    result = PacedCompletionClient(client, RequestPacer(0)).complete("test")
+
+    assert result == "ok"
+    assert client.attempts == 2

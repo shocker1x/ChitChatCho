@@ -36,7 +36,13 @@ def load_scenarios(path: str | Path = SCENARIOS_PATH) -> list[dict[str, Any]]:
                 "starting_situation": category["starting_situation"],
                 "persona": category["persona"],
                 "hidden_facts": dict(category["hidden_facts"]),
-                "customer_turns": [{"message": case["message"], "situation": case["situation"]}],
+                "customer_turns": [{
+                    "message": case["message"],
+                    "situation": case["situation"],
+                    **({"policy_forbidden": True} if case.get("policy_forbidden") else {}),
+                    **({"authority_exceeded": True} if case.get("authority_exceeded") else {}),
+                    **({"explicit_confirmation": True} if case.get("explicit_confirmation") else {}),
+                }],
                 "expected_moves": case.get("expected_moves", category["expected_moves"]),
                 "forbidden_behaviours": list(category["forbidden_behaviours"]),
             }

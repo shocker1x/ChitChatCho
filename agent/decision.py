@@ -4,7 +4,7 @@ import json
 from enum import StrEnum
 from typing import Any
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, ValidationError
 
 from agent.llm import CompletionClient, create_llm_client
 from policies.lookup import get_policies_for
@@ -188,8 +188,21 @@ class DecisionEngine:
             customer_profile or {},
             policies,
         )
-        raw_decision = self.client.complete(prompt)
-        decision = DecisionRecord.model_validate_json(_json_payload(raw_decision))
+        decision = None
+        validation_error: Exception | None = None
+        for attempt in range(3):
+            raw_decision = self.client.complete(prompt)
+            try:
+                decision = DecisionRecord.model_validate(_decision_payload(raw_decision))
+                break
+            except (json.JSONDecodeError, ValidationError, ValueError) as error:
+                validation_error = error
+                if attempt == 2:
+                    raise ValueError(
+                        f"Model failed to return a valid decision after three attempts: {error}"
+                    ) from error
+        if decision is None:
+            raise ValueError(f"Model failed to return a valid decision: {validation_error}")
         if decision.gate_override is not None:
             raise ValueError("The model cannot set the deterministic gate override field.")
 
@@ -227,6 +240,18 @@ class DecisionEngine:
             "emotion": [emotion.value for emotion in Emotion],
             "reason": "one or two concise sentences",
         }
+        output_template = {
+            "intent": "customer goal",
+            "known": [],
+            "missing": [],
+            "move": "answer | clarify | act | confirm | escalate | decline",
+            "confidence": "low | medium | high",
+            "stakes": "low | medium | high",
+            "policy_refs": [],
+            "tool_plan": [],
+            "emotion": "calm | frustrated | anxious | confused | angry",
+            "reason": "one or two sentences",
+        }
         context = {
             "customer_message": message,
             "conversation_history": history,
@@ -238,8 +263,10 @@ class DecisionEngine:
             "You are the internal decision step for a fictional rug-store support agent. "
             "Choose exactly one move. Do not write a customer-facing reply or perform tools. "
             "Never invent facts. Use only supplied policy IDs. For missing information, list only "
-            "what is needed next. Return one JSON object matching this schema, with no markdown.\n"
-            f"Schema: {json.dumps(schema, ensure_ascii=True)}\n"
+            "what is needed next. Return exactly one JSON object with the fields in the template, "
+            "with no extra context fields and no markdown.\n"
+            f"Output template: {json.dumps(output_template, ensure_ascii=True)}\n"
+            f"Allowed values: {json.dumps(schema, ensure_ascii=True)}\n"
             f"Context: {json.dumps(context, ensure_ascii=True)}"
         )
 
@@ -251,3 +278,26 @@ def _json_payload(text: str) -> str:
         if len(lines) >= 3 and lines[-1].strip() == "```":
             stripped = "\n".join(lines[1:-1]).strip()
     return stripped
+
+
+def _decision_payload(text: str) -> dict[str, Any]:
+    payload = json.loads(_json_payload(text))
+    if isinstance(payload, dict) and isinstance(payload.get("decision_record"), dict):
+        payload = payload["decision_record"]
+    if not isinstance(payload, dict):
+        raise ValueError("The model decision must be a JSON object.")
+
+    for echoed_field in {
+        "customer_message",
+        "conversation_history",
+        "known_facts",
+        "customer_profile_internal_only",
+        "applicable_mock_policies",
+    }:
+        payload.pop(echoed_field, None)
+    if "tool_plan" not in payload and isinstance(payload.get("tool"), list):
+        payload["tool_plan"] = payload.pop("tool")
+    elif payload.get("tool") == "":
+        payload["tool_plan"] = []
+        payload.pop("tool")
+    return payload

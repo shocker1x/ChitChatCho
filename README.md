@@ -72,6 +72,8 @@ python -m evals.runner
 
 The command reports expected-move and overall pass rates by category, deterministic hard-rule violations (including unsupported dates, customer-specific status claims, and numeric policy claims), and averages for each rubric item. It saves full transcripts and scores to the ignored `evals/results/latest.json`. For a small provider smoke run, use `python -m evals.runner --limit 3 --no-judge`.
 
+The recorded Phase 7 baseline improved from 73.3% to 90.0% across two completed 60-scenario runs. The iteration details, rubric averages, and remaining hard-rule revalidation are in [docs/phase7-results.md](docs/phase7-results.md). A subsequent checker/emotion-guidance fix still needs a complete evaluation run before the zero-hard-violation target is confirmed.
+
 Hard checks are deterministic and do not call a model. The rubric judge is model-based and validates all eight scores. After generating at least 20 judge-scored transcripts, prepare a human-rating sheet with `python -m evals.calibration --prepare evals/results/latest.json`; complete each `human_scores` object, then calculate exact agreement and linearly weighted Cohen's kappa using `python -m evals.calibration --score evals/calibration.json`. Human calibration results remain pending until those ratings are supplied.
 
 See [docs/manual_chats.md](docs/manual_chats.md) for ten manually drafted sample conversations and [docs/decisions.md](docs/decisions.md) for the design choices.
