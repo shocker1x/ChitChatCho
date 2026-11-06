@@ -1,8 +1,8 @@
 # ChitChatCho
 
-A phased portfolio project for a text-first rug-store support agent. All customer, product, order, and policy data is synthetic. This repository currently contains Phase 0 setup only.
+A phased portfolio project for a text-first rug-store support agent. All customer, product, order, shipment, and policy data is synthetic.
 
-## Phase 0 Setup
+## Setup
 
 Requires Python 3.11 or newer. From PowerShell in the repository root:
 
@@ -26,7 +26,7 @@ python -m pytest
 python -m app.seed_db
 ```
 
-Make one live Claude smoke call:
+Make a live model smoke call using the configured provider and model:
 
 ```powershell
 python -m app.model_smoke
@@ -34,4 +34,20 @@ python -m app.model_smoke
 
 The minimal FastAPI chat endpoint can also be started with `python -m uvicorn app.main:app --reload`; it exposes `GET /health` and `POST /chat` with a JSON body such as `{"message":"Hello"}`. `LLM_PROVIDER` defaults to `gemini` and `LLM_MODEL` to `gemini-3.8-flash`. Anthropic remains available for the planned later switch by setting `LLM_PROVIDER=anthropic`, `ANTHROPIC_API_KEY`, and a Claude model in `LLM_MODEL`.
 
-See [docs/decisions.md](docs/decisions.md) for Phase 0 setup choices.
+## Mock Backend
+
+`python -m app.seed_db` initializes the local SQLite database with 15 synthetic customers, 30 catalog products, 40 orders across processing, shipped, delivered, delayed, and damaged-reported states, and mock shipment data. All seed identities use reserved `.invalid` emails.
+
+The tools are available directly from Python:
+
+```python
+from tools import MockTools
+
+tools = MockTools()
+tools.search_catalog(category="runner", material="wool")
+tools.lookup_order("MOCK-ORDER-001", postcode="MOCK 1001")
+```
+
+Order lookup, tracking, return checks, and order mutations require an order number plus matching email or postcode. Risky mutations also require `confirmed=True` and a stable `idempotency_key`. Every call and result is recorded in SQLite; no real store, payment, or shipping service is contacted.
+
+See [docs/decisions.md](docs/decisions.md) for the mock-data and backend design choices.

@@ -1,27 +1,59 @@
 {
   "data_notice": "All records below are invented mock data for this portfolio project.",
   "customers": [
-    {
-      "customer_id": "MOCK-CUST-001",
-      "name": "Jordan Sample",
-      "email": "jordan@example.invalid"
-    }
+    {"customer_id":"MOCK-CUST-001","name":"Jordan Sample","email":"jordan@example.invalid","postcode":"MOCK 1001"},
+    {"customer_id":"MOCK-CUST-002","name":"Casey Example","email":"casey@example.invalid","postcode":"MOCK 1002"},
+    {"customer_id":"MOCK-CUST-003","name":"Riley Demo","email":"riley@example.invalid","postcode":"MOCK 1003"},
+    {"customer_id":"MOCK-CUST-004","name":"Morgan Fiction","email":"morgan@example.invalid","postcode":"MOCK 1004"},
+    {"customer_id":"MOCK-CUST-005","name":"Avery Placeholder","email":"avery@example.invalid","postcode":"MOCK 1005"},
+    {"customer_id":"MOCK-CUST-006","name":"Taylor Sample","email":"taylor@example.invalid","postcode":"MOCK 1006"},
+    {"customer_id":"MOCK-CUST-007","name":"Quinn Example","email":"quinn@example.invalid","postcode":"MOCK 1007"},
+    {"customer_id":"MOCK-CUST-008","name":"Jamie Demo","email":"jamie@example.invalid","postcode":"MOCK 1008"},
+    {"customer_id":"MOCK-CUST-009","name":"Alex Fiction","email":"alex@example.invalid","postcode":"MOCK 1009"},
+    {"customer_id":"MOCK-CUST-010","name":"Drew Placeholder","email":"drew@example.invalid","postcode":"MOCK 1010"},
+    {"customer_id":"MOCK-CUST-011","name":"Sam Sample","email":"sam@example.invalid","postcode":"MOCK 1011"},
+    {"customer_id":"MOCK-CUST-012","name":"Reese Example","email":"reese@example.invalid","postcode":"MOCK 1012"},
+    {"customer_id":"MOCK-CUST-013","name":"Skyler Demo","email":"skyler@example.invalid","postcode":"MOCK 1013"},
+    {"customer_id":"MOCK-CUST-014","name":"Robin Fiction","email":"robin@example.invalid","postcode":"MOCK 1014"},
+    {"customer_id":"MOCK-CUST-015","name":"Devon Placeholder","email":"devon@example.invalid","postcode":"MOCK 1015"}
   ],
   "products": [
-    {
-      "product_id": "MOCK-RUG-001",
-      "name": "Cedar Wool Rug",
-      "size": "5x8",
-      "material": "wool",
-      "price": 249.0
-    }
+    {"product_id":"MOCK-RUG-001","name":"Cedar Wool Rug","category":"rug","size":"5x8","material":"wool","construction":"hand-tufted","pile_height":"medium","color":"sage","style":"transitional","price":249.0},
+    {"product_id":"MOCK-RUG-002","name":"Harbor Jute Rug","category":"rug","size":"6x9","material":"jute","construction":"handwoven","pile_height":"low","color":"natural","style":"coastal","price":319.0},
+    {"product_id":"MOCK-RUG-003","name":"Meadow Cotton Rug","category":"rug","size":"8x10","material":"cotton","construction":"flatweave","pile_height":"low","color":"blue","style":"modern","price":289.0},
+    {"product_id":"MOCK-RUG-004","name":"Juniper Wool Rug","category":"rug","size":"8x10","material":"wool","construction":"hand-knotted","pile_height":"high","color":"ivory","style":"traditional","price":899.0},
+    {"product_id":"MOCK-RUG-005","name":"Mesa Synthetic Rug","category":"rug","size":"5x8","material":"synthetic","construction":"machine-made","pile_height":"low","color":"terracotta","style":"geometric","price":159.0},
+    {"product_id":"MOCK-RUG-006","name":"Willow Wool Runner","category":"runner","size":"2.5x8","material":"wool","construction":"hand-tufted","pile_height":"medium","color":"green","style":"botanical","price":179.0},
+    {"product_id":"MOCK-RUG-007","name":"Pebble Jute Runner","category":"runner","size":"2.5x10","material":"jute","construction":"handwoven","pile_height":"low","color":"natural","style":"coastal","price":199.0},
+    {"product_id":"MOCK-RUG-008","name":"Poppy Cotton Rug","category":"rug","size":"5x8","material":"cotton","construction":"flatweave","pile_height":"low","color":"rust","style":"bohemian","price":229.0},
+    {"product_id":"MOCK-RUG-009","name":"Slate Wool Rug","category":"rug","size":"6x9","material":"wool","construction":"hand-knotted","pile_height":"medium","color":"gray","style":"modern","price":649.0},
+    {"product_id":"MOCK-RUG-010","name":"Dune Synthetic Runner","category":"runner","size":"2.5x8","material":"synthetic","construction":"machine-made","pile_height":"low","color":"sand","style":"minimal","price":99.0},
+    {"product_id":"MOCK-RUG-011","name":"Fern Wool Rug","category":"rug","size":"8x10","material":"wool","construction":"hand-tufted","pile_height":"high","color":"olive","style":"botanical","price":579.0},
+    {"product_id":"MOCK-RUG-012","name":"Tide Jute Rug","category":"rug","size":"5x8","material":"jute","construction":"handwoven","pile_height":"low","color":"natural","style":"coastal","price":279.0},
+    {"product_id":"MOCK-RUG-013","name":"Cloud Cotton Runner","category":"runner","size":"2.5x10","material":"cotton","construction":"flatweave","pile_height":"low","color":"cream","style":"minimal","price":139.0},
+    {"product_id":"MOCK-RUG-014","name":"Terrace Wool Rug","category":"rug","size":"6x9","material":"wool","construction":"hand-knotted","pile_height":"medium","color":"navy","style":"traditional","price":729.0},
+    {"product_id":"MOCK-RUG-015","name":"Grid Synthetic Rug","category":"rug","size":"8x10","material":"synthetic","construction":"machine-made","pile_height":"low","color":"charcoal","style":"geometric","price":349.0},
+    {"product_id":"MOCK-RUG-016","name":"Olive Wool Runner","category":"runner","size":"2.5x8","material":"wool","construction":"hand-tufted","pile_height":"medium","color":"olive","style":"transitional","price":189.0},
+    {"product_id":"MOCK-RUG-017","name":"Drift Jute Rug","category":"rug","size":"8x10","material":"jute","construction":"handwoven","pile_height":"low","color":"natural","style":"rustic","price":429.0},
+    {"product_id":"MOCK-RUG-018","name":"Sky Cotton Rug","category":"rug","size":"6x9","material":"cotton","construction":"flatweave","pile_height":"low","color":"blue","style":"modern","price":269.0},
+    {"product_id":"MOCK-RUG-019","name":"Wheat Wool Rug","category":"rug","size":"5x8","material":"wool","construction":"hand-knotted","pile_height":"high","color":"wheat","style":"traditional","price":519.0},
+    {"product_id":"MOCK-RUG-020","name":"Contour Synthetic Runner","category":"runner","size":"2.5x10","material":"synthetic","construction":"machine-made","pile_height":"low","color":"multicolor","style":"geometric","price":129.0},
+    {"product_id":"MOCK-RUG-021","name":"Studio Wool Rug","category":"rug","size":"8x10","material":"wool","construction":"hand-tufted","pile_height":"medium","color":"charcoal","style":"modern","price":599.0},
+    {"product_id":"MOCK-RUG-022","name":"Lagoon Jute Runner","category":"runner","size":"2.5x8","material":"jute","construction":"handwoven","pile_height":"low","color":"blue","style":"coastal","price":169.0},
+    {"product_id":"MOCK-RUG-023","name":"Rose Cotton Rug","category":"rug","size":"5x8","material":"cotton","construction":"flatweave","pile_height":"low","color":"rose","style":"bohemian","price":219.0},
+    {"product_id":"MOCK-RUG-024","name":"Pine Wool Rug","category":"rug","size":"6x9","material":"wool","construction":"hand-knotted","pile_height":"high","color":"forest","style":"traditional","price":779.0},
+    {"product_id":"MOCK-RUG-025","name":"Pebble Synthetic Rug","category":"rug","size":"5x8","material":"synthetic","construction":"machine-made","pile_height":"low","color":"gray","style":"minimal","price":149.0},
+    {"product_id":"MOCK-ACC-026","name":"Natural Felt Rug Pad","category":"rug_pad","size":"5x8","material":"felt","construction":"cut-to-fit","pile_height":"","color":"natural","style":"protective","price":49.0},
+    {"product_id":"MOCK-ACC-027","name":"Grip Rug Pad","category":"rug_pad","size":"6x9","material":"synthetic","construction":"non-slip","pile_height":"","color":"gray","style":"protective","price":59.0},
+    {"product_id":"MOCK-ACC-028","name":"Wool Care Kit","category":"care_kit","size":"one-size","material":"care products","construction":"kit","pile_height":"","color":"n/a","style":"care","price":35.0},
+    {"product_id":"MOCK-ACC-029","name":"Fiber Care Kit","category":"care_kit","size":"one-size","material":"care products","construction":"kit","pile_height":"","color":"n/a","style":"care","price":29.0},
+    {"product_id":"MOCK-RUG-030","name":"Custom Wool Rug","category":"rug","size":"cut-to-size","material":"wool","construction":"hand-tufted","pile_height":"medium","color":"custom","style":"custom","price":399.0}
   ],
-  "orders": [
-    {
-      "order_id": "MOCK-ORDER-001",
-      "customer_id": "MOCK-CUST-001",
-      "product_id": "MOCK-RUG-001",
-      "status": "processing"
-    }
-  ]
+  "order_status_counts": {
+    "processing": 8,
+    "shipped": 8,
+    "delivered": 8,
+    "delayed": 8,
+    "damaged-reported": 8
+  }
 }

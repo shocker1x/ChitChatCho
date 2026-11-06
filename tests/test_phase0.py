@@ -16,9 +16,10 @@ def test_database_initialization_seeds_synthetic_records(tmp_path):
     initialize_database(database)
 
     with sqlite3.connect(database) as connection:
-        assert connection.execute("SELECT COUNT(*) FROM customers").fetchone()[0] == 1
-        assert connection.execute("SELECT COUNT(*) FROM products").fetchone()[0] == 1
-        assert connection.execute("SELECT COUNT(*) FROM orders").fetchone()[0] == 1
+        assert connection.execute("SELECT COUNT(*) FROM customers").fetchone()[0] == 15
+        assert connection.execute("SELECT COUNT(*) FROM products").fetchone()[0] == 30
+        assert connection.execute("SELECT COUNT(*) FROM orders").fetchone()[0] == 40
+        assert connection.execute("SELECT COUNT(*) FROM shipments").fetchone()[0] == 32
         assert connection.execute("SELECT COUNT(*) FROM conversations").fetchone()[0] == 0
 
 
@@ -26,6 +27,9 @@ def test_database_seed_contains_only_reserved_mock_identity():
     from app.db import SEED_PATH
 
     seed = json.loads(SEED_PATH.read_text(encoding="utf-8"))
+    assert len(seed["customers"]) == 15
+    assert len(seed["products"]) == 30
+    assert sum(seed["order_status_counts"].values()) == 40
     assert ".invalid" in seed["customers"][0]["email"]
     assert seed["data_notice"].startswith("All records")
 
