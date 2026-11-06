@@ -26,4 +26,7 @@ testpaths = ["tests"]
 addopts = "-q"
 
 [tool.setuptools.packages.find]
-include = ["agent*", "app*"]
+include = ["agent*", "app*", "policies*"]
+
+[tool.setuptools.package-data]
+policies = ["rules.json"]

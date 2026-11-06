@@ -1,0 +1,75 @@
+{
+  "data_notice": "All policies and thresholds in this file are invented mock rules for this portfolio project.",
+  "situations": {
+    "order_status": ["identity_verification", "customer_privacy", "shipment_date_honesty"],
+    "delivery_estimate": ["identity_verification", "shipment_date_honesty"],
+    "return_request": ["standard_returns", "custom_final_sale"],
+    "damaged_or_wrong_item": ["damage_reporting", "return_shipping_cost"],
+    "cancel_or_edit": ["pre_shipment_changes", "identity_verification"],
+    "refund_or_credit": ["refund_credit_authority"],
+    "customer_data": ["identity_verification", "customer_privacy"],
+    "product_advice": ["normal_rug_characteristics"]
+  },
+  "rules": [
+    {
+      "id": "standard_returns",
+      "title": "Standard returns",
+      "rule": "A standard return is eligible within 30 days of delivery if the rug is unused and in its original packaging. The customer pays return shipping unless the item was wrong or damaged.",
+      "mock": true
+    },
+    {
+      "id": "custom_final_sale",
+      "title": "Custom and cut-to-size final sale",
+      "rule": "Custom or cut-to-size rugs are final sale and are not eligible for a standard return.",
+      "mock": true
+    },
+    {
+      "id": "damage_reporting",
+      "title": "Damage or wrong item reporting",
+      "rule": "Damage or a wrong item must be reported within 48 hours of delivery, with at least one photo.",
+      "mock": true
+    },
+    {
+      "id": "return_shipping_cost",
+      "title": "Return shipping responsibility",
+      "rule": "The customer pays return shipping for a standard return unless the item was wrong or damaged.",
+      "mock": true
+    },
+    {
+      "id": "pre_shipment_changes",
+      "title": "Cancellation and edits before shipment",
+      "rule": "An order may be cancelled or edited only before it ships.",
+      "mock": true
+    },
+    {
+      "id": "refund_credit_authority",
+      "title": "Refund and store-credit authority",
+      "rule": "The agent may issue a refund or store credit up to and including 150 mock currency units. Amounts above 150 must be escalated to a human.",
+      "mock": true
+    },
+    {
+      "id": "identity_verification",
+      "title": "Identity verification",
+      "rule": "Verify identity with the order number plus the email address or postcode on the order before sharing order details.",
+      "mock": true
+    },
+    {
+      "id": "customer_privacy",
+      "title": "Customer privacy",
+      "rule": "Never share another customer's information. Do not reveal profile data before identity is verified.",
+      "mock": true
+    },
+    {
+      "id": "shipment_date_honesty",
+      "title": "Shipment date accuracy",
+      "rule": "Never promise a delivery date unless that date is present in the shipment data.",
+      "mock": true
+    },
+    {
+      "id": "normal_rug_characteristics",
+      "title": "Normal rug characteristics",
+      "rule": "Shedding from a new wool rug and slight color variation between a screen and a room are normal characteristics; explain them honestly and do not call them defects without supporting facts.",
+      "mock": true
+    }
+  ]
+}
