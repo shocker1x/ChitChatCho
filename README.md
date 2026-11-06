@@ -54,4 +54,6 @@ Order lookup, tracking, return checks, and order mutations require an order numb
 
 `DecisionEngine.decide(message, situation, ...)` asks the configured model for a structured decision record and validates its move, confidence, stakes, emotion, policy references, and tool plan. A deterministic gate then enforces the policy/authority limits, identity requirements, missing facts, stakes, and confirmation requirements. The gate scenario table runs locally without a model call.
 
-See [docs/decisions.md](docs/decisions.md) for the mock-data, backend, and decision-gate choices.
+`POST /conversations/{conversation_id}/turns` accepts a customer message, its validated decision record, and any tool results, then writes a customer-facing reply and stores the turn. `GET /conversations/{conversation_id}/transcript` shows each customer message and reply beside its decision record. Prior turns are not automatically loaded into future prompts yet; conversation memory is reserved for Phase 5. The original `POST /chat` route remains a provider smoke endpoint.
+
+See [docs/manual_chats.md](docs/manual_chats.md) for ten manually drafted sample conversations and [docs/decisions.md](docs/decisions.md) for the design choices.

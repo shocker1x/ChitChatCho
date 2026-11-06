@@ -63,6 +63,16 @@ def initialize_database(
                 customer_id TEXT REFERENCES customers(customer_id),
                 summary TEXT NOT NULL DEFAULT ''
             );
+            CREATE TABLE IF NOT EXISTS conversation_turns (
+                turn_id INTEGER PRIMARY KEY AUTOINCREMENT,
+                conversation_id TEXT NOT NULL REFERENCES conversations(conversation_id),
+                turn_number INTEGER NOT NULL,
+                customer_message TEXT NOT NULL,
+                decision_json TEXT NOT NULL,
+                reply TEXT NOT NULL,
+                created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                UNIQUE(conversation_id, turn_number)
+            );
             CREATE TABLE IF NOT EXISTS shipments (
                 order_id TEXT PRIMARY KEY REFERENCES orders(order_id),
                 carrier TEXT NOT NULL,
