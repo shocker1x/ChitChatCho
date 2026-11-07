@@ -10,6 +10,7 @@ from agent.reply import ReplyEngine
 from app.db import DEFAULT_DB_PATH
 from agent.memory import MemoryStore
 from app.transcripts import get_transcript, render_transcript_html
+from app.ui import chat_page, results_page, ui_index_page
 
 
 app = FastAPI(title="ChitChatCho Mock Support Agent")
@@ -43,6 +44,21 @@ class CompleteConversationRequest(BaseModel):
 @app.get("/health")
 def health() -> dict[str, str]:
     return {"status": "ok"}
+
+
+@app.get("/ui", response_class=HTMLResponse)
+def ui_index() -> HTMLResponse:
+    return ui_index_page()
+
+
+@app.get("/ui/chat", response_class=HTMLResponse)
+def ui_chat() -> HTMLResponse:
+    return chat_page()
+
+
+@app.get("/ui/results", response_class=HTMLResponse)
+def ui_results() -> HTMLResponse:
+    return results_page()
 
 
 @app.post("/chat", response_model=ChatResponse)
