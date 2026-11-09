@@ -13,60 +13,90 @@ def chat_page() -> HTMLResponse:
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>Atelier support</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&display=swap" rel="stylesheet" />
     <style>
       :root {
-        --bg: #f3efe8;
-        --bg-strong: #e7dfd4;
-        --panel: rgba(255, 255, 255, 0.76);
-        --panel-strong: rgba(255, 255, 255, 0.9);
-        --ink: #171b1f;
-        --muted: #5f625d;
-        --line: rgba(23, 27, 31, 0.12);
-        --stone: #1d2429;
-        --stone-soft: #2a3035;
-        --sand: #ddd0ba;
-        --sage: #b9c7b4;
-        --gold: #c99552;
-        --shadow: rgba(15, 17, 19, 0.12);
+        --bg: #dce4e9;
+        --workspace-bg: rgba(220,229,235,0.72);
+        --panel-bg: rgba(239,243,246,0.78);
+        --composer-bg: rgba(216,226,233,0.54);
+        --composer-surface: rgba(244,247,249,0.48);
+        --user-bubble: rgba(105,137,155,0.16);
+        --ink: #1b2b35;
+        --muted: #5b6d78;
+        --line: rgba(43, 69, 84, 0.18);
+        --line-soft: rgba(43,69,84,0.12);
+        --steel: #55778b;
+        --steel-strong: #52778d;
+        --user-meta: #506b7b;
+        --thumb: rgba(92,126,145,0.72);
+        --thumb-hover: rgba(64,103,124,0.9);
+        --focus: rgba(67,112,137,0.75);
+        --button-shadow: 0 7px 16px rgba(43,69,84,0.2);
+      }
+
+      body[data-theme="dark"] {
+        --bg: #1a252c;
+        --workspace-bg: #202c33;
+        --panel-bg: #26343c;
+        --composer-bg: #202d35;
+        --composer-surface: #2b3a43;
+        --user-bubble: #354b58;
+        --ink: #e7edf1;
+        --muted: #aab9c2;
+        --line: rgba(190,207,216,0.18);
+        --line-soft: rgba(190,207,216,0.13);
+        --steel: #86a3b3;
+        --steel-strong: #68899b;
+        --user-meta: #c2d2db;
+        --thumb: rgba(132,163,180,0.76);
+        --thumb-hover: rgba(161,187,201,0.95);
+        --focus: rgba(145,183,204,0.86);
+        --button-shadow: 0 7px 16px rgba(0,0,0,0.28);
       }
 
       * { box-sizing: border-box; }
-      html, body { height: 100%; }
+      html, body { height: 100%; overflow: hidden; }
       body {
         margin: 0;
-        min-height: 100vh;
-        background:
-          radial-gradient(circle at top left, rgba(255,255,255,0.9), transparent 28%),
-          linear-gradient(135deg, var(--bg) 0%, var(--bg-strong) 100%);
+        height: 100vh;
+        height: 100dvh;
+        min-height: 0;
+        background: var(--bg);
         color: var(--ink);
-        font: 16px/1.55 "Segoe UI", Arial, sans-serif;
+        font: 16px/1.55 "DM Sans", "Segoe UI", sans-serif;
       }
       button, textarea { font: inherit; }
 
       .page {
-        min-height: 100vh;
+        height: 100vh;
+        height: 100dvh;
+        min-height: 0;
         display: grid;
         place-items: center;
-        padding: 26px;
+        padding: 68px 26px 26px;
+        overflow: hidden;
       }
 
       .workspace {
-        width: min(1200px, 100%);
-        min-height: min(900px, calc(100vh - 52px));
+        width: min(920px, 100%);
+        height: min(900px, calc(100dvh - 94px));
+        min-height: 0;
         display: grid;
-        grid-template-columns: minmax(0, 1.7fr) minmax(300px, 0.78fr);
-        border: 1px solid var(--line);
-        border-radius: 28px;
-        background: rgba(255,255,255,0.34);
-        backdrop-filter: blur(12px);
-        box-shadow: 0 32px 90px rgba(19, 20, 22, 0.12);
+        grid-template-columns: minmax(0, 1fr);
+        background: var(--workspace-bg);
+        backdrop-filter: blur(18px);
         overflow: hidden;
       }
 
       .chat-panel {
         display: flex;
         flex-direction: column;
-        background: linear-gradient(180deg, rgba(255,255,255,0.7), rgba(248,245,240,0.74));
+        min-height: 0;
+        overflow: hidden;
+        background: var(--panel-bg);
       }
 
       .panel-header {
@@ -82,20 +112,21 @@ def chat_page() -> HTMLResponse:
         display: inline-flex;
         align-items: center;
         gap: 12px;
-        font-weight: 700;
-        letter-spacing: -0.04em;
+        font-family: "Newsreader", Georgia, serif;
+        font-size: 1.22rem;
+        font-weight: 500;
       }
 
       .brand-mark {
         width: 42px;
         height: 42px;
-        border-radius: 14px;
+        border-radius: 50%;
         display: grid;
         place-items: center;
-        background: linear-gradient(135deg, var(--stone) 0%, #414a52 100%);
-        color: #f8f5ee;
+        background: var(--steel);
+        color: #f5f8fa;
         font-size: 0.9rem;
-        box-shadow: inset 0 1px 0 rgba(255,255,255,0.25);
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.42);
       }
 
       .header-actions {
@@ -108,10 +139,9 @@ def chat_page() -> HTMLResponse:
         display: inline-flex;
         align-items: center;
         gap: 8px;
-        padding: 8px 12px;
-        border-radius: 999px;
-        background: rgba(39, 48, 55, 0.06);
-        border: 1px solid var(--line);
+        padding: 4px 0;
+        background: transparent;
+        border: 0;
         color: var(--muted);
         font-size: 0.8rem;
         text-transform: uppercase;
@@ -123,9 +153,32 @@ def chat_page() -> HTMLResponse:
         width: 8px;
         height: 8px;
         border-radius: 50%;
-        background: #5f8d5c;
-        box-shadow: 0 0 0 4px rgba(95,141,92,0.14);
+        background: #5c8a77;
+        box-shadow: 0 0 0 4px rgba(92,138,119,0.13);
       }
+
+      .theme-toggle {
+        position: fixed;
+        top: max(12px, env(safe-area-inset-top));
+        right: max(20px, env(safe-area-inset-right));
+        z-index: 20;
+        width: 40px;
+        height: 40px;
+        display: grid;
+        place-items: center;
+        border: 1px solid var(--line);
+        border-radius: 50%;
+        background: transparent;
+        color: var(--ink);
+        cursor: pointer;
+        transition: background-color 160ms ease, color 160ms ease, border-color 160ms ease;
+      }
+
+      .theme-toggle:hover { background: var(--user-bubble); }
+      .theme-toggle svg { width: 19px; height: 19px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+      .theme-icon-sun { display: none; }
+      body[data-theme="dark"] .theme-icon-moon { display: none; }
+      body[data-theme="dark"] .theme-icon-sun { display: block; }
 
       .ghost-button {
         border: 1px solid var(--line);
@@ -151,15 +204,19 @@ def chat_page() -> HTMLResponse:
       .meta-strip {
         display: grid;
         grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 12px;
-        padding: 18px 26px 0;
+        gap: 0;
+        margin: 0 26px;
+        padding: 16px 0;
+        border-bottom: 1px solid var(--line-soft);
       }
 
       .meta-card {
-        padding: 14px 16px;
-        border: 1px solid var(--line);
-        border-radius: 18px;
-        background: rgba(255,255,255,0.4);
+        padding: 4px 16px;
+        background: transparent;
+      }
+
+      .meta-card + .meta-card {
+        border-left: 1px solid var(--line-soft);
       }
 
       .meta-label {
@@ -176,89 +233,98 @@ def chat_page() -> HTMLResponse:
         letter-spacing: -0.02em;
       }
 
-      .thread {
+      .thread-frame {
         flex: 1;
+        min-height: 0;
         position: relative;
-        overflow: auto;
-        padding: 26px 26px 18px 34px;
+        overflow: hidden;
+      }
+
+      .thread {
+        width: 100%;
+        height: 100%;
+        min-height: 0;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        scrollbar-width: none;
+        padding: 22px 42px 18px 26px;
+      }
+
+      .thread::-webkit-scrollbar { display: none; width: 0; height: 0; }
+
+      .custom-scrollbar {
+        position: absolute;
+        inset: 14px 8px 14px auto;
+        width: 14px;
+        opacity: 0;
+        touch-action: none;
+        transition: opacity 180ms ease;
+      }
+
+      .custom-scrollbar.visible,
+      .custom-scrollbar:hover,
+      .custom-scrollbar:focus-visible,
+      .custom-scrollbar.dragging { opacity: 1; }
+
+      .custom-scrollbar[hidden] { display: none; }
+
+      .custom-scrollbar-thumb {
+        position: absolute;
+        top: 0;
+        right: 4px;
+        width: 6px;
+        min-height: 32px;
+        border-radius: 999px;
+        background: var(--thumb);
+        box-shadow: inset 0 0 0 1px rgba(255,255,255,0.26);
+        cursor: grab;
+        transition: width 150ms ease, right 150ms ease, background 150ms ease;
+      }
+
+      .custom-scrollbar:hover .custom-scrollbar-thumb,
+      .custom-scrollbar:focus-visible .custom-scrollbar-thumb {
+        right: 3px;
+        width: 8px;
+        background: var(--thumb-hover);
+      }
+
+      .custom-scrollbar.dragging .custom-scrollbar-thumb { cursor: grabbing; }
+      .custom-scrollbar:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+      @media (max-width: 600px) {
+        .thread { padding: 18px 34px 18px 18px; }
       }
 
       .thread::before {
-        content: "";
-        position: absolute;
-        left: 22px;
-        top: 26px;
-        bottom: 18px;
-        width: 2px;
-        background: linear-gradient(180deg, rgba(23,27,31,0.12), rgba(23,27,31,0.18), rgba(23,27,31,0.12));
+        content: none;
       }
 
       .turn {
         position: relative;
         display: grid;
-        grid-template-columns: 28px minmax(0, 1fr);
+        grid-template-columns: minmax(0, 1fr);
         gap: 16px;
         margin: 16px 0;
         align-items: start;
       }
 
       .turn.customer {
-        grid-template-columns: minmax(0, 1fr) 28px;
+        grid-template-columns: minmax(0, 1fr);
         justify-items: end;
-      }
-
-      .turn-node {
-        width: 28px;
-        height: 28px;
-        border-radius: 50%;
-        border: 1px solid rgba(23, 27, 31, 0.18);
-        background: rgba(255,255,255,0.45);
-        box-shadow: 0 0 0 5px rgba(255,255,255,0.4);
-        display: grid;
-        place-items: center;
-        font-size: 0.62rem;
-        font-weight: 700;
-        letter-spacing: 0.08em;
-        color: var(--muted);
-        cursor: pointer;
-        transition: transform 0.2s ease, border-color 0.2s ease;
-        z-index: 1;
-      }
-
-      .turn.customer .turn-node {
-        justify-self: end;
-      }
-
-      .turn-node:hover {
-        transform: scale(1.04);
-        border-color: rgba(23,27,31,0.3);
-      }
-
-      .turn-node.answer {
-        background: linear-gradient(135deg, var(--stone) 0%, var(--stone-soft) 100%);
-        color: #f5f0ea;
-        border-color: rgba(23,27,31,0.8);
-      }
-
-      .turn-node.clarify {
-        background: linear-gradient(135deg, rgba(201,149,82,0.18), rgba(201,149,82,0.32));
-        border-color: rgba(201,149,82,0.6);
-        color: #6c4e20;
       }
 
       .bubble {
         max-width: min(82%, 460px);
-        padding: 16px 18px;
-        border-radius: 20px;
-        background: rgba(255,255,255,0.38);
-        border: 1px solid rgba(23,27,31,0.06);
-        box-shadow: 0 10px 18px rgba(17, 20, 23, 0.04);
+        padding: 12px 0;
+        background: transparent;
+        border: 0;
+        box-shadow: none;
       }
 
       .turn.customer .bubble {
-        background: linear-gradient(135deg, var(--stone) 0%, #2d363d 100%);
-        color: #f2efe9;
-        border-color: rgba(0,0,0,0.08);
+        padding: 12px 18px;
+        background: var(--user-bubble);
+        color: var(--ink);
       }
 
       .bubble-meta {
@@ -270,30 +336,57 @@ def chat_page() -> HTMLResponse:
       }
 
       .turn.customer .bubble-meta {
-        color: rgba(255,255,255,0.72);
+        color: var(--user-meta);
       }
 
       .bubble p {
         margin: 0;
-        font-size: 1.04rem;
-        line-height: 1.7;
+        font-family: "Newsreader", Georgia, serif;
+        font-size: 1.2rem;
+        line-height: 1.65;
       }
 
+      .empty-state {
+        min-height: 260px;
+        display: grid;
+        align-content: center;
+        justify-items: center;
+        gap: 8px;
+        color: var(--muted);
+        text-align: center;
+      }
+
+      .empty-state[hidden] { display: none; }
+
+      .empty-state strong {
+        color: var(--ink);
+        font-family: "Newsreader", Georgia, serif;
+        font-size: 1.65rem;
+        font-weight: 400;
+      }
+
+      .empty-state span { font-size: 0.9rem; }
+      .turn.pending .bubble { color: var(--muted); font-style: italic; }
+      .send-button:disabled { opacity: 0.55; cursor: wait; }
+      .send-button:hover:not(:disabled) { transform: translateY(-1px); filter: brightness(1.08); }
+      .send-button:active:not(:disabled) { transform: translateY(0); }
+
       .composer {
-        border-top: 1px solid var(--line);
-        padding: 18px 22px 26px;
-        background: rgba(255,255,255,0.2);
+        border-top: 1px solid var(--line-soft);
+        padding: 18px 26px 26px;
+        background: var(--composer-bg);
       }
 
       .composer-form {
         display: flex;
         gap: 12px;
         align-items: flex-end;
-        padding: 12px 14px 12px 18px;
-        border-radius: 22px;
-        border: 1px solid rgba(23,27,31,0.08);
-        background: rgba(255,255,255,0.48);
-        box-shadow: inset 0 1px 0 rgba(255,255,255,0.44);
+        padding: 12px 0;
+        border-radius: 0;
+        border: 0;
+        border-bottom: 1px solid var(--line);
+        background: var(--composer-surface);
+        box-shadow: none;
       }
 
       textarea {
@@ -309,145 +402,45 @@ def chat_page() -> HTMLResponse:
 
       textarea::placeholder { color: var(--muted); }
       textarea:focus-visible, button:focus-visible {
-        outline: 2px solid rgba(201,149,82,0.9);
+        outline: 2px solid var(--focus);
         outline-offset: 2px;
       }
 
       .send-button {
-        min-width: 116px;
-        min-height: 46px;
+        width: 48px;
+        height: 48px;
+        min-width: 48px;
         border: 0;
         border-radius: 999px;
-        background: linear-gradient(135deg, var(--stone) 0%, #3d4650 100%);
-        color: #f9f5ee;
-        font-weight: 700;
-        cursor: pointer;
-        box-shadow: 0 12px 22px rgba(24,27,31,0.18);
-      }
-
-      .inspector {
-        background: linear-gradient(180deg, rgba(22,25,29,0.96), rgba(18,22,25,0.98));
-        color: #f5f0ea;
-        border-left: 1px solid rgba(255,255,255,0.08);
-        display: flex;
-        flex-direction: column;
-      }
-
-      .inspector-inner {
-        padding: 26px 22px 20px;
-        display: flex;
-        flex-direction: column;
-        gap: 18px;
-        height: 100%;
-      }
-
-      .inspector-head {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 12px;
-        padding-bottom: 12px;
-        border-bottom: 1px solid rgba(255,255,255,0.08);
-      }
-
-      .inspector-title {
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-      }
-
-      .kicker {
-        font-size: 0.7rem;
-        letter-spacing: 0.12em;
-        text-transform: uppercase;
-        color: rgba(255,255,255,0.62);
-      }
-
-      .move-label {
-        font-size: 1.05rem;
-        font-weight: 700;
-        letter-spacing: -0.02em;
-        text-transform: capitalize;
-      }
-
-      .close-button {
-        border: 1px solid rgba(255,255,255,0.08);
-        background: rgba(255,255,255,0.02);
-        color: #f5f0ea;
-        width: 36px;
-        height: 36px;
-        border-radius: 10px;
-        cursor: pointer;
-        font-size: 1.2rem;
-      }
-
-      .inspector-block {
         display: grid;
-        gap: 10px;
-      }
-
-      .inspector-block h3 {
-        margin: 0;
-        font-size: 0.72rem;
-        letter-spacing: 0.12em;
-        text-transform: uppercase;
-        color: rgba(255,255,255,0.62);
-      }
-
-      .inspector-block p,
-      .inspector-block li {
-        margin: 0;
-        color: rgba(245,240,234,0.9);
-      }
-
-      .inspector-block ul {
-        margin: 0;
-        padding-left: 18px;
-      }
-
-      .tag-row {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-      }
-
-      .tag {
-        display: inline-flex;
-        align-items: center;
-        padding: 7px 10px;
-        border-radius: 999px;
-        border: 1px solid rgba(255,255,255,0.08);
-        background: rgba(255,255,255,0.03);
-        color: rgba(245,240,234,0.94);
-        font-size: 0.78rem;
-      }
-
-      .nav-row {
-        display: flex;
-        gap: 10px;
-        padding-top: 8px;
-        margin-top: auto;
-      }
-
-      .nav-button {
-        flex: 1;
-        min-height: 42px;
-        border-radius: 12px;
-        border: 1px solid rgba(255,255,255,0.08);
-        background: rgba(255,255,255,0.02);
-        color: #f5f0ea;
+        place-items: center;
+        padding: 0;
+        background: var(--steel-strong);
+        color: #f4f7f9;
         cursor: pointer;
+        box-shadow: var(--button-shadow), inset 0 1px 0 rgba(255,255,255,0.32);
+        transition: transform 160ms ease, filter 160ms ease, box-shadow 160ms ease;
       }
 
-      @media (max-width: 900px) {
-        .workspace {
-          grid-template-columns: 1fr;
-        }
-        .inspector {
-          border-left: 0;
-          border-top: 1px solid rgba(255,255,255,0.08);
-        }
+      .send-button svg {
+        width: 20px;
+        height: 20px;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 1.8;
+        stroke-linecap: round;
+        stroke-linejoin: round;
       }
+
+      @media (max-width: 600px) {
+        .page { padding: 58px 12px 12px; }
+        .workspace { height: calc(100dvh - 70px); }
+        .panel-header { padding: 16px 18px; }
+        .meta-strip { margin: 0 18px; }
+        .thread { padding: 18px; }
+        .composer { padding: 14px 18px calc(14px + env(safe-area-inset-bottom)); }
+      }
+
     </style>
   </head>
   <body>
@@ -462,223 +455,225 @@ def chat_page() -> HTMLResponse:
             </div>
             <div class="header-actions">
               <span class="mini-pill">Live</span>
-              <button class="ghost-button" type="button">Order R-8402</button>
             </div>
           </header>
 
           <div class="meta-strip" aria-label="Conversation summary">
             <div class="meta-card">
               <span class="meta-label">Issue</span>
-              <span class="meta-value">Shipping status</span>
+              <span class="meta-value">Customer support</span>
             </div>
             <div class="meta-card">
               <span class="meta-label">Channel</span>
               <span class="meta-value">Chat</span>
             </div>
             <div class="meta-card">
-              <span class="meta-label">Priority</span>
-              <span class="meta-value">Normal</span>
+              <span class="meta-label">Status</span>
+              <span class="meta-value">Ready to help</span>
             </div>
           </div>
 
-          <main class="thread" id="conversation" aria-live="polite">
-            <article class="turn agent" aria-label="Turn 1: answer">
-              <button class="turn-node answer" type="button" data-index="0" aria-label="Turn 1 answer">01</button>
-              <div class="bubble">
-                <div class="bubble-meta">Atelier Support</div>
-                <p>Hi, I’m here to help with your rug order.</p>
+          <div class="thread-frame">
+            <main class="thread" id="conversation" aria-live="polite">
+              <div class="empty-state" id="empty-state">
+                <strong>How can I help?</strong>
+                <span>Send a message to start a conversation.</span>
               </div>
-            </article>
-
-            <article class="turn customer" aria-label="Customer message">
-              <div class="bubble">
-                <div class="bubble-meta">Customer</div>
-                <p>Where is my order?</p>
-              </div>
-              <button class="turn-node answer" type="button" data-index="1" aria-label="Customer message">02</button>
-            </article>
-
-            <article class="turn agent" aria-label="Turn 2: clarify">
-              <button class="turn-node clarify" type="button" data-index="2" aria-label="Turn 2 clarify">03</button>
-              <div class="bubble">
-                <div class="bubble-meta">Atelier Support</div>
-                <p>Happy to check. What is the order number?</p>
-              </div>
-            </article>
-          </main>
+            </main>
+            <div class="custom-scrollbar" id="conversation-scrollbar" role="scrollbar" aria-label="Conversation scrollbar" aria-controls="conversation" aria-orientation="vertical" aria-valuemin="0" aria-valuemax="0" aria-valuenow="0" tabindex="0" hidden>
+              <div class="custom-scrollbar-thumb" id="conversation-scrollbar-thumb"></div>
+            </div>
+          </div>
 
           <div class="composer">
             <form class="composer-form" id="composer" aria-label="Write a message">
               <textarea id="message-input" rows="1" placeholder="Write a message"></textarea>
-              <button class="send-button" type="submit">Send</button>
+              <button class="send-button" type="submit" aria-label="Send message" title="Send message">
+                <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7" /></svg>
+              </button>
             </form>
           </div>
         </section>
 
-        <aside class="inspector" id="inspector" aria-label="Decision inspector" aria-hidden="false">
-          <div class="inspector-inner">
-            <div class="inspector-head">
-              <div class="inspector-title">
-                <span class="kicker">Decision trace</span>
-                <div class="move-label" id="inspector-move">answer</div>
-              </div>
-              <button class="close-button" id="close-inspector" type="button" aria-label="Close decision detail">×</button>
-            </div>
-
-            <div class="inspector-block">
-              <div class="kicker" id="inspector-turn">Turn 1</div>
-              <h3>Reason</h3>
-              <p id="inspector-reason">The agent can answer directly from the known order context and reassure the customer without blocking the conversation.</p>
-            </div>
-
-            <div class="inspector-block">
-              <h3>Known</h3>
-              <ul id="inspector-known"><li>The customer is asking about a rug order.</li></ul>
-            </div>
-
-            <div class="inspector-block">
-              <h3>Missing</h3>
-              <ul id="inspector-missing"><li>Order number or verification details.</li></ul>
-            </div>
-
-            <div class="inspector-block">
-              <h3>Policy refs</h3>
-              <div class="tag-row" id="inspector-policies"></div>
-            </div>
-
-            <div class="inspector-block">
-              <h3>Tools</h3>
-              <div class="tag-row" id="inspector-tools"></div>
-            </div>
-
-            <div class="nav-row">
-              <button class="nav-button" type="button" id="prev-turn">Previous</button>
-              <button class="nav-button" type="button" id="next-turn">Next</button>
-            </div>
-          </div>
-        </aside>
       </div>
+      <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch to dark mode" title="Switch to dark mode">
+        <svg class="theme-icon-moon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20.2 15.4A8.3 8.3 0 0 1 8.6 3.8 8.4 8.4 0 1 0 20.2 15.4Z" /></svg>
+        <svg class="theme-icon-sun" aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" /><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42" /></svg>
+      </button>
     </div>
 
     <script>
-      const decisions = [
-        {
-          turn: 'Turn 1',
-          move: 'answer',
-          reason: 'The agent can answer directly from the known order context and reassure the customer without blocking the conversation.',
-          known: ['The customer is asking about a rug order.'],
-          missing: ['Order number or verification details.'],
-          policies: ['shipment_status', 'customer_reassurance'],
-          tools: ['lookup_order']
-        },
-        {
-          turn: 'Turn 2',
-          move: 'clarify',
-          reason: 'The agent needs a single missing fact to move forward and keep the conversation efficient.',
-          known: ['The inquiry is about a pending order.'],
-          missing: ['Order number.'],
-          policies: ['identity_check'],
-          tools: ['lookup_order']
-        },
-        {
-          turn: 'Turn 3',
-          move: 'answer',
-          reason: 'Once the order number is known, the agent can provide a concise status update and next steps.',
-          known: ['The customer has supplied the order number.'],
-          missing: ['Customer verification details if needed.'],
-          policies: ['shipment_status'],
-          tools: ['track_shipment']
-        }
-      ];
-
-      const inspector = document.getElementById('inspector');
-      const mover = document.getElementById('inspector-move');
-      const turnLabel = document.getElementById('inspector-turn');
-      const reason = document.getElementById('inspector-reason');
-      const knownList = document.getElementById('inspector-known');
-      const missingList = document.getElementById('inspector-missing');
-      const policyTarget = document.getElementById('inspector-policies');
-      const toolsTarget = document.getElementById('inspector-tools');
-      const prev = document.getElementById('prev-turn');
-      const next = document.getElementById('next-turn');
-      const closeBtn = document.getElementById('close-inspector');
-      let activeIndex = 0;
-
-      function renderInspector(index) {
-        const decision = decisions[index];
-        if (!decision) return;
-        mover.textContent = decision.move;
-        turnLabel.textContent = decision.turn;
-        reason.textContent = decision.reason;
-        knownList.innerHTML = decision.known.map(item => `<li>${item}</li>`).join('');
-        missingList.innerHTML = decision.missing.map(item => `<li>${item}</li>`).join('');
-        policyTarget.innerHTML = decision.policies.map(item => `<span class="tag">${item}</span>`).join('');
-        toolsTarget.innerHTML = decision.tools.map(item => `<span class="tag">${item}</span>`).join('');
-      }
-
-      function openInspector(index) {
-        activeIndex = index;
-        renderInspector(index);
-      }
-
-      document.addEventListener('click', (event) => {
-        const btn = event.target.closest('.turn-node');
-        if (btn) {
-          openInspector(Number(btn.dataset.index));
-        }
-      });
-
-      closeBtn.addEventListener('click', () => {
-        inspector.setAttribute('aria-hidden', 'true');
-      });
-
-      prev.addEventListener('click', () => {
-        activeIndex = Math.max(0, activeIndex - 1);
-        renderInspector(activeIndex);
-      });
-
-      next.addEventListener('click', () => {
-        activeIndex = Math.min(decisions.length - 1, activeIndex + 1);
-        renderInspector(activeIndex);
-      });
+      const history = [];
 
       const form = document.getElementById('composer');
       const textarea = document.getElementById('message-input');
+      const sendButton = form.querySelector('.send-button');
+      const conversation = document.getElementById('conversation');
+      const emptyState = document.getElementById('empty-state');
+      const themeToggle = document.getElementById('theme-toggle');
+      const scrollbar = document.getElementById('conversation-scrollbar');
+      const scrollbarThumb = document.getElementById('conversation-scrollbar-thumb');
+      let scrollbarHideTimer;
+      let dragStartY = 0;
+      let dragStartScrollTop = 0;
+
+      function setTheme(theme) {
+        document.body.dataset.theme = theme;
+        const nextTheme = theme === 'dark' ? 'light' : 'dark';
+        themeToggle.setAttribute('aria-label', `Switch to ${nextTheme} mode`);
+        themeToggle.title = `Switch to ${nextTheme} mode`;
+      }
+
+      setTheme(localStorage.getItem('chitchatcho-theme') === 'dark' ? 'dark' : 'light');
+      themeToggle.addEventListener('click', () => {
+        const nextTheme = document.body.dataset.theme === 'dark' ? 'light' : 'dark';
+        setTheme(nextTheme);
+        localStorage.setItem('chitchatcho-theme', nextTheme);
+      });
+
+      function updateScrollbar() {
+        const scrollRange = conversation.scrollHeight - conversation.clientHeight;
+        if (!conversation.querySelector('.turn') || scrollRange <= 0) {
+          scrollbar.hidden = true;
+          return;
+        }
+
+        scrollbar.hidden = false;
+        const trackHeight = scrollbar.clientHeight;
+        if (trackHeight <= 0) return;
+        const thumbHeight = Math.max(32, trackHeight * conversation.clientHeight / conversation.scrollHeight);
+        const thumbRange = trackHeight - thumbHeight;
+        const thumbTop = thumbRange * conversation.scrollTop / scrollRange;
+        scrollbarThumb.style.height = `${thumbHeight}px`;
+        scrollbarThumb.style.transform = `translateY(${thumbTop}px)`;
+        scrollbar.setAttribute('aria-valuemax', String(Math.round(scrollRange)));
+        scrollbar.setAttribute('aria-valuenow', String(Math.round(conversation.scrollTop)));
+      }
+
+      function showScrollbar() {
+        scrollbar.classList.add('visible');
+        clearTimeout(scrollbarHideTimer);
+        scrollbarHideTimer = setTimeout(() => scrollbar.classList.remove('visible'), 900);
+      }
+
+      conversation.addEventListener('scroll', () => {
+        updateScrollbar();
+        showScrollbar();
+      });
+
+      new ResizeObserver(updateScrollbar).observe(document.querySelector('.thread-frame'));
+      new MutationObserver(updateScrollbar).observe(conversation, {
+        childList: true,
+        characterData: true,
+        subtree: true
+      });
+
+      scrollbar.addEventListener('pointerdown', (event) => {
+        if (event.target === scrollbarThumb) return;
+        const bounds = scrollbar.getBoundingClientRect();
+        const ratio = (event.clientY - bounds.top) / bounds.height;
+        conversation.scrollTop = ratio * (conversation.scrollHeight - conversation.clientHeight);
+      });
+
+      scrollbarThumb.addEventListener('pointerdown', (event) => {
+        event.preventDefault();
+        dragStartY = event.clientY;
+        dragStartScrollTop = conversation.scrollTop;
+        scrollbar.classList.add('dragging');
+        scrollbarThumb.setPointerCapture(event.pointerId);
+      });
+
+      scrollbarThumb.addEventListener('pointermove', (event) => {
+        if (!scrollbar.classList.contains('dragging')) return;
+        const thumbRange = scrollbar.clientHeight - scrollbarThumb.offsetHeight;
+        if (thumbRange <= 0) return;
+        const scrollRange = conversation.scrollHeight - conversation.clientHeight;
+        conversation.scrollTop = dragStartScrollTop + (event.clientY - dragStartY) * scrollRange / thumbRange;
+      });
+
+      scrollbarThumb.addEventListener('pointerup', () => scrollbar.classList.remove('dragging'));
+      scrollbarThumb.addEventListener('pointercancel', () => scrollbar.classList.remove('dragging'));
+
+      scrollbar.addEventListener('keydown', (event) => {
+        const pageStep = conversation.clientHeight * 0.8;
+        const movements = {
+          ArrowUp: -40,
+          ArrowDown: 40,
+          PageUp: -pageStep,
+          PageDown: pageStep,
+          Home: -conversation.scrollTop,
+          End: conversation.scrollHeight - conversation.scrollTop
+        };
+        if (!(event.key in movements)) return;
+        event.preventDefault();
+        conversation.scrollBy({ top: movements[event.key], behavior: 'smooth' });
+      });
+
+      textarea.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' && !event.shiftKey && !event.isComposing) {
+          event.preventDefault();
+          form.requestSubmit();
+        }
+      });
+
+      function appendTurn(role, content, pending = false) {
+        const turn = document.createElement('article');
+        turn.className = `turn ${role === 'user' ? 'customer' : 'agent'}${pending ? ' pending' : ''}`;
+
+        const bubble = document.createElement('div');
+        bubble.className = 'bubble';
+        const label = document.createElement('div');
+        label.className = 'bubble-meta';
+        label.textContent = role === 'user' ? 'You' : 'Atelier Support';
+        const paragraph = document.createElement('p');
+        paragraph.textContent = content;
+        bubble.append(label, paragraph);
+
+        turn.append(bubble);
+        conversation.appendChild(turn);
+        conversation.scrollTo({ top: conversation.scrollHeight, behavior: 'smooth' });
+        updateScrollbar();
+        return paragraph;
+      }
 
       textarea.addEventListener('input', () => {
         textarea.style.height = 'auto';
         textarea.style.height = Math.min(textarea.scrollHeight, 120) + 'px';
       });
 
-      form.addEventListener('submit', (event) => {
+      form.addEventListener('submit', async (event) => {
         event.preventDefault();
         const value = textarea.value.trim();
-        if (!value) return;
+        if (!value || sendButton.disabled) return;
 
-        const customerTurn = document.createElement('article');
-        customerTurn.className = 'turn customer';
-        customerTurn.innerHTML = `
-          <div class="bubble">
-            <div class="bubble-meta">Customer</div>
-            <p>${value}</p>
-          </div>
-          <button class="turn-node answer" type="button" data-index="${decisions.length}" aria-label="Customer message">${String(decisions.length + 1).padStart(2, '0')}</button>
-        `;
-        document.getElementById('conversation').appendChild(customerTurn);
-
-        const agentTurn = document.createElement('article');
-        agentTurn.className = 'turn agent';
-        agentTurn.innerHTML = `
-          <button class="turn-node answer" type="button" data-index="${decisions.length + 1}" aria-label="Turn ${decisions.length + 1} answer">${String(decisions.length + 2).padStart(2, '0')}</button>
-          <div class="bubble">
-            <div class="bubble-meta">Atelier Support</div>
-            <p>I can check that. I’ll look up the order and confirm the latest status next.</p>
-          </div>
-        `;
-        document.getElementById('conversation').appendChild(agentTurn);
-
+        emptyState.hidden = true;
+        appendTurn('user', value);
+        const pendingReply = appendTurn('assistant', 'Thinking…', true);
+        history.push({ role: 'user', content: value });
+        sendButton.disabled = true;
         textarea.value = '';
         textarea.style.height = 'auto';
+
+        try {
+          const response = await fetch('/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: value, history: history.slice(0, -1) })
+          });
+          const result = await response.json();
+          if (!response.ok) {
+            throw new Error(result.detail || 'The assistant could not answer right now.');
+          }
+          pendingReply.textContent = result.reply;
+          pendingReply.parentElement.parentElement.classList.remove('pending');
+          history.push({ role: 'assistant', content: result.reply });
+        } catch (error) {
+          pendingReply.textContent = error.message || 'Could not reach the assistant. Please try again.';
+          pendingReply.parentElement.parentElement.classList.remove('pending');
+        } finally {
+          sendButton.disabled = false;
+          textarea.focus();
+        }
       });
     </script>
   </body>

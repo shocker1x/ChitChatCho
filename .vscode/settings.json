@@ -1,0 +1,12 @@
+{
+    "chat.tools.terminal.autoApprove": {
+        "/^\\.\\\\\\.venv\\\\Scripts\\\\Activate\\.ps1; python -m pytest tests/test_ui\\.py -q$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^\\.\\\\\\.venv\\\\Scripts\\\\Activate\\.ps1; python -m pytest$/": {
+            "approve": true,
+            "matchCommandLine": true
+        }
+    }
+}

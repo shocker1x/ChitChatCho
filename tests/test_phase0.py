@@ -105,7 +105,8 @@ def test_anthropic_remains_selectable(monkeypatch):
 def test_chat_endpoint_returns_provider_reply(monkeypatch):
     class FakeClient:
         def complete(self, prompt):
-            assert prompt == "Hello"
+            assert "Customer: Hello" in prompt
+            assert "Do not claim to have checked orders" in prompt
             return "Hello from the mock provider."
 
     monkeypatch.setattr("app.main.create_llm_client", lambda: FakeClient())

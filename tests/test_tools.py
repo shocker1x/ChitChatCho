@@ -33,6 +33,14 @@ def test_order_lookup_requires_order_number_and_matching_identity(mock_tools):
     assert verified["order"]["order_id"] == "MOCK-ORDER-001"
 
 
+def test_order_exists_checks_only_the_requested_order_id(mock_tools):
+    existing = mock_tools.order_exists("MOCK-ORDER-001")
+    missing = mock_tools.order_exists("MOCK-ORDER-402")
+
+    assert existing == {"ok": True, "exists": True}
+    assert missing == {"ok": True, "exists": False}
+
+
 def test_track_shipment_and_return_eligibility(mock_tools):
     shipment = mock_tools.track_shipment("MOCK-ORDER-009", email="alex@example.invalid")
     eligible = mock_tools.check_return_eligibility(

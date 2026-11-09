@@ -81,6 +81,18 @@ class MockTools:
 
         return self._invoke("lookup_order", inputs, action)
 
+    def order_exists(self, order_id: str) -> dict[str, Any]:
+        inputs = {"order_id": order_id}
+
+        def action(connection: sqlite3.Connection) -> dict[str, Any]:
+            exists = connection.execute(
+                "SELECT 1 FROM orders WHERE order_id = ?",
+                (order_id,),
+            ).fetchone() is not None
+            return {"ok": True, "exists": exists}
+
+        return self._invoke("order_exists", inputs, action)
+
     def track_shipment(
         self,
         order_id: str,
